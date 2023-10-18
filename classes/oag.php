@@ -12,7 +12,7 @@ class OAGFileProcessor
     const doflights = true;
     const doroutes = false;
     const uploadsfolder = 'uploads/';
-    const downloadsfolder = 'uploads/';
+    const downloadsfolder = 'downloads/';
     //const LINEENDING = PHP_EOL;
     const LINEENDING = '<br/>';
 
