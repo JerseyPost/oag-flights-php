@@ -23,10 +23,14 @@ if (!in_array($_FILES["file"]["type"], $allowedFileTypes)) {
 // Save the file to a secure location on the server.
 $uploadDirectory = "uploads";
 $fileName = $_FILES["file"]["name"];
-move_uploaded_file($_FILES["file"]["tmp_name"], $uploadDirectory . "/" . $fileName);
+$result = move_uploaded_file($_FILES["file"]["tmp_name"], $uploadDirectory . "/" . $fileName);
 
 // Display a success message to the user.
-echo "The file was uploaded successfully to ".$uploadDirectory . "/" . $fileName;
+if ($result) {
+    echo "The file was uploaded successfully to ".$uploadDirectory . "/" . $fileName;
+} else {
+    echo "The file FAILED to upload to ".$uploadDirectory . "/" . $fileName;
+}
 
 // ----------------------------------
 
