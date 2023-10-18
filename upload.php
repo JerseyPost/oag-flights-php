@@ -1,6 +1,10 @@
 <?php
 require_once 'bootstrap.php';
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // Check if the file was uploaded successfully.
 if (!isset($_FILES["file"]) || $_FILES["file"]["error"] != 0) {
     echo "An error occurred while uploading the file.";
