@@ -1,4 +1,5 @@
 <?php
+require_once 'bootstrap.php';
 
 // Check if the file was uploaded successfully.
 if (!isset($_FILES["file"]) || $_FILES["file"]["error"] != 0) {
@@ -25,6 +26,6 @@ $fileName = $_FILES["file"]["name"];
 move_uploaded_file($_FILES["file"]["tmp_name"], $uploadDirectory . "/" . $fileName);
 
 // Display a success message to the user.
-echo "The file was uploaded successfully.";
-
+echo "The file was uploaded successfully to ".$uploadDirectory . "/" . $fileName;
+OAGFileProcessor::run($uploadDirectory . "/" . $fileName)
 ?>
