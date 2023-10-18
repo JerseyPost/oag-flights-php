@@ -5,6 +5,9 @@
     "require": {
         "alrik11es/cowsayphp": "^1.2"
     },
+    "autoload": {
+        "classmap": ["classes/"]
+    },
     "authors": [
         {
             "name": "Kamal Nasser",
