@@ -14,6 +14,7 @@ class OAGRoutes extends OAGBase
 
     function fetchUniqueLegsFromRoutesFile($filename)
     {
+        echo "Reading $filename".$this->LINEENDING;
 
         $legsArray = [];
 
@@ -61,12 +62,12 @@ class OAGRoutes extends OAGBase
 
         //echo "HERE *$limit*".__LINE__;
         $legs = array_slice($uniqueLegs, 0, !empty($this->limit) ? $this->limit : 999999);
-        echo "HERE " . __LINE__ . " " . count($legs) . PHP_EOL;
+        echo "HERE " . __LINE__ . " " . count($legs) . $this->LINEENDING;
         //die();
         // Iterate through the legs and get all flights for each leg
         foreach ($legs as $i => $leg) {
             // Split the leg into origin and destination airports
-            echo __METHOD__.": Calling getAirLabsRoutes for leg $i/" . count($legs) . " $leg" . PHP_EOL;
+            echo __METHOD__.": Calling getAirLabsRoutes for leg $i/" . count($legs) . " $leg" . $this->LINEENDING;
             $airports = explode('-', $leg);
             //echo "<pre>airports ".print_r($airports,true)."</pre>";
 
@@ -98,7 +99,7 @@ class OAGRoutes extends OAGBase
         //echo "///////////////////////////";
         //var_dump($flightsArray);
         //echo "<pre>flightsArray ".print_r($flightsArray,true)."</pre>";
-        echo "flightsArray:" . count($flightsArray) . PHP_EOL;
+        echo "flightsArray:" . count($flightsArray) . $this->LINEENDING;
         //die();
 
         return ['flightsArray' => $flightsArray, 'missingFlights' => $missingFlights];

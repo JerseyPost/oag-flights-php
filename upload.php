@@ -21,11 +21,53 @@ if (!in_array($_FILES["file"]["type"], $allowedFileTypes)) {
 }
 
 // Save the file to a secure location on the server.
-$uploadDirectory = "upload";
+$uploadDirectory = "uploads";
 $fileName = $_FILES["file"]["name"];
 move_uploaded_file($_FILES["file"]["tmp_name"], $uploadDirectory . "/" . $fileName);
 
 // Display a success message to the user.
 echo "The file was uploaded successfully to ".$uploadDirectory . "/" . $fileName;
-OAGFileProcessor::run($uploadDirectory . "/" . $fileName)
+
+// ----------------------------------
+
+// Get an array of all the files in the upload folder.
+$files = scandir($uploadDirectory);
+
+echo "<h1>Currently uploaded files</h1>";
+
+// Create an empty HTML table.
+$htmlTable = "<table>";
+
+// Add a table header row.
+$htmlTable .= "<thead>";
+$htmlTable .= "<tr>";
+$htmlTable .= "<th>File Name</th>";
+$htmlTable .= "<th>Timestamp</th>";
+$htmlTable .= "</tr>";
+$htmlTable .= "</thead>";
+
+// Add a table body row for each file.
+$htmlTable .= "<tbody>";
+foreach ($files as $file) {
+    if ($file != "." && $file != "..") {
+        $htmlTable .= "<tr>";
+        $htmlTable .= "<td>" . $file . "</td>";
+        $htmlTable .= "<td>" . date("Y-m-d H:i:s", filemtime($uploadDirectory . "/" . $file)) . "</td>";
+        $htmlTable .= "</tr>";
+    }
+}
+$htmlTable .= "</tbody>";
+
+// Close the HTML table.
+$htmlTable .= "</table>";
+
+// Echo the HTML table to the screen.
+echo $htmlTable;
+
+
+
 ?>
+
+<form action="process.php" method="post">
+    <input type="submit" value="Process">
+</form>

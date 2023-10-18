@@ -11,14 +11,16 @@ class OAGFileProcessor
 {
     const doflights = true;
     const doroutes = false;
+    const uploadsfolder = 'uploads/';
+    const downloadsfolder = 'uploads/';
+    //const LINEENDING = PHP_EOL;
+    const LINEENDING = '<br/>';
 
-    public static function run($flightsfile)
+    public static function run($incomingflightsfile, $incomingroutesfile)
     {
 
         //const FLIGHTSFILE = "2023_Summer_Flights_20230324_100000.csv"; // Replace this with the path to your CSV file
         $datetimestamp = date('Ymd_His');
-
-        echo "Starting with oagflightsObj" . PHP_EOL;
 
         $airlabsConnection = new AirLabs();
 
@@ -29,30 +31,34 @@ class OAGFileProcessor
         // FLIGHTS
 
         if (SELF::doflights) {
-            $flightFromFlightFile = $oagflightsObj->fetchFlightsFromFlightsFile($flightsfile);
+            echo "Starting with Flights File $incomingflightsfile" . self::LINEENDING;
+
+            $flightFromFlightFile = $oagflightsObj->fetchFlightsFromFlightsFile(self::uploadsfolder.$incomingflightsfile);
 
             if ($flightFromFlightFile !== false) {
 
                 extract($oagflightsObj->getAirportAndRoutDataForFlightNumbers($flightFromFlightFile));
 
-                $flightsfile = 'oagflightsresults_' . $datetimestamp . '.csv';
+                $flightsfile = self::downloadsfolder.'oagflightsresults_' . $datetimestamp . '.csv';
                 $oagflightsObj->getFlightDetailsAndOutputCSV($flightsArray, $flightsfile);
 
-                echo "MISSING FLIGHTS (from FLIGHTS)" . PHP_EOL;
+                echo "MISSING FLIGHTS (from FLIGHTS)" . self::LINEENDING;
                 print_r($missingFlights);
             }
         } // doflights
 
 
         // ROUTES
-        if (SELF::doroutes) {
-            $uniqueLegs = $oagroutesObj->fetchUniqueLegsFromRoutesFile('2023_Summer_Routes_20230324_110000.csv');
+        if (self::doroutes) {
+            echo "Starting with Routes File $incomingroutesfile" . self::LINEENDING;
+
+            $uniqueLegs = $oagroutesObj->fetchUniqueLegsFromRoutesFile(self::uploadsfolder.$incomingroutesfile);
 
             extract($oagroutesObj->findFlightsForLegs($uniqueLegs));
-            $routesfile = 'oagroutessresults_' . $datetimestamp . '.csv';
+            $routesfile = self::downloadsfolder.'oagroutessresults_' . $datetimestamp . '.csv';
             $oagroutesObj->getFlightDetailsAndOutputCSV($flightsArray, $routesfile);
 
-            echo "MISSING FLIGHTS (from ROUTES)" . PHP_EOL;
+            echo "MISSING FLIGHTS (from ROUTES)" . self::LINEENDING;
             print_r($missingFlights);
         }
 
@@ -65,14 +71,14 @@ class OAGFileProcessor
             echo "Flights: $flightsfile and ";
             $content1 = file_get_contents($flightsfile);
         } else {
-            echo "No Fligts file" . PHP_EOL;
+            echo "No Fligts file" . self::LINEENDING;
         }
 
         if (!empty($routesfile)) {
-            echo "Routes: $routesfile" . PHP_EOL;
+            echo "Routes: $routesfile" . self::LINEENDING;
             $content2 = file_get_contents($routesfile);
         } else {
-            echo "No Routes file" . PHP_EOL;
+            echo "No Routes file" . self::LINEENDING;
         }
         $headerrow = JPUtils::stringToCsv('carrier,fltno,depapt,depctry,arrapt,arrctry,deptim,arrtim,arrday,days,stops,efffrom,effto');
 
@@ -83,7 +89,17 @@ class OAGFileProcessor
 
         // Save the concatenated content to a new file
         $combinedFilename = "combined_$datetimestamp.csv";
-        file_put_contents($combinedFilename, $combinedContent);
-        echo "Combined file is $combinedFilename" . PHP_EOL;
+        file_put_contents(self::downloadsfolder.$combinedFilename, $combinedContent);
+        echo "Combined file is $combinedFilename" . self::LINEENDING;
+
+
+// Create an HTML form with a download button.
+$htmlForm = "<form action='download.php' method='post'>";
+$htmlForm .= "<input type='hidden' name='fileName' value='$combinedFilename'>";
+$htmlForm .= "<input type='submit' value='Download'>";
+$htmlForm .= "</form>";
+
+// Echo the HTML form to the screen.
+echo $htmlForm;
     }
 }

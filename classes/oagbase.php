@@ -6,6 +6,8 @@ class OAGBase {
     protected $lastSundayInOctober;
     protected $lastSundayInMarch;
 
+    protected $LINEENDING = '<br/>';
+
     protected $limit;
 
     function __construct($airlabsConnection = null, $limit=9999999)
