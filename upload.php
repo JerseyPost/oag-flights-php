@@ -26,7 +26,7 @@ if (!in_array($_FILES["file"]["type"], $allowedFileTypes)) {
 
 // Save the file to a secure location on the server.
 $uploadDirectory = "uploads";
-$fileName = $_FILES["file"]["name"];
+$fileName = basename($_FILES["file"]["name"]);
 $result = move_uploaded_file($_FILES["file"]["tmp_name"], $uploadDirectory . "/" . $fileName);
 
 // Display a success message to the user.
