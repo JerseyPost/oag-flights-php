@@ -16,7 +16,7 @@ class OAGFileProcessor
     //const LINEENDING = PHP_EOL;
     const LINEENDING = '<br/>';
 
-    public static function run($incomingflightsfile, $incomingroutesfile)
+    public static function run($incomingflightsfile, $incomingroutesfile, $flightlimit=1, $routeslimit=3)
     {
 
         //const FLIGHTSFILE = "2023_Summer_Flights_20230324_100000.csv"; // Replace this with the path to your CSV file
@@ -24,8 +24,8 @@ class OAGFileProcessor
 
         $airlabsConnection = new AirLabs();
 
-        $oagflightsObj = new OAGFlights($airlabsConnection, 1);
-        $oagroutesObj = new OAGRoutes($airlabsConnection, 3);
+        $oagflightsObj = new OAGFlights($airlabsConnection, $flightlimit);
+        $oagroutesObj = new OAGRoutes($airlabsConnection, $routeslimit);
 
 
         // FLIGHTS
