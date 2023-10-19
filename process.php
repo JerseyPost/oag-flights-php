@@ -46,4 +46,4 @@ if ($mostRecentRoutesFile) {
 }
 
 
-OAGFileProcessor::run($mostRecentFlightsFile["file"], $mostRecentRoutesFile["file"], $flightslimit. $routeslimit);
+OAGFileProcessor::run($mostRecentFlightsFile["file"], $mostRecentRoutesFile["file"], $flightslimit, $routeslimit);

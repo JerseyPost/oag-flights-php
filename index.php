@@ -33,7 +33,7 @@
     // Add a table body row for each file.
     $htmlTable .= "<tbody>";
     foreach ($files as $file) {
-        if ($file != "." && $file != "..") {
+        if ($file != "." && $file != ".." && $file != "index.php") {
             $htmlTable .= "<tr>";
             $htmlTable .= "<td>" . $file . "</td>";
             $htmlTable .= "<td>" . date("Y-m-d H:i:s", filemtime($uploadDirectory . "/" . $file)) . "</td>";

@@ -47,7 +47,7 @@ class OAGFlights extends OAGBase
 
 
 
-    function getAirportAndRoutDataForFlightNumbers(array $flightNumbers): array
+    function getAirportAndRouteDataForFlightNumbers(array $flightNumbers): array
     {
 
 

@@ -16,7 +16,7 @@ class OAGFileProcessor
     //const LINEENDING = PHP_EOL;
     const LINEENDING = '<br/>';
 
-    public static function run($incomingflightsfile, $incomingroutesfile, $flightlimit=1, $routeslimit=3)
+    public static function run($incomingflightsfile, $incomingroutesfile, $flightslimit=1, $routeslimit=3)
     {
 
         //const FLIGHTSFILE = "2023_Summer_Flights_20230324_100000.csv"; // Replace this with the path to your CSV file
@@ -24,7 +24,7 @@ class OAGFileProcessor
 
         $airlabsConnection = new AirLabs();
 
-        $oagflightsObj = new OAGFlights($airlabsConnection, $flightlimit);
+        $oagflightsObj = new OAGFlights($airlabsConnection, $flightslimit);
         $oagroutesObj = new OAGRoutes($airlabsConnection, $routeslimit);
 
 
@@ -37,7 +37,7 @@ class OAGFileProcessor
 
             if ($flightFromFlightFile !== false) {
 
-                extract($oagflightsObj->getAirportAndRoutDataForFlightNumbers($flightFromFlightFile));
+                extract($oagflightsObj->getAirportAndRouteDataForFlightNumbers($flightFromFlightFile));
 
                 $flightsfile = self::downloadsfolder . 'oagflightsresults_' . $datetimestamp . '.csv';
                 $oagflightsObj->getFlightDetailsAndOutputCSV($flightsArray, $flightsfile);
