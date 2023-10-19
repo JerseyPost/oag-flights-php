@@ -33,10 +33,10 @@ class OAGRoutes extends OAGBase
             // Read each row of the CSV
             while (($data = fgetcsv($handle)) !== FALSE) {
                 if (strtolower(trim($data[$MailCategory])) == 'a') {
-                    $legsArray[] = $data[$leg1Index];
-                    $legsArray[] = $data[$leg2Index];
-                    $legsArray[] = $data[$leg3Index];
-                    $legsArray[] = $data[$leg4Index];
+                    if (!empty(trim($data[$leg1Index]))) $legsArray[] = trim($data[$leg1Index]);
+                    if (!empty(trim($data[$leg2Index]))) $legsArray[] = trim($data[$leg2Index]);
+                    if (!empty(trim($data[$leg3Index]))) $legsArray[] = trim($data[$leg3Index]);
+                    if (!empty(trim($data[$leg4Index]))) $legsArray[] = trim($data[$leg4Index]);
                 }
             }
 
@@ -70,13 +70,13 @@ class OAGRoutes extends OAGBase
         // Iterate through the legs and get all flights for each leg
         foreach ($legs as $i => $leg) {
             // Split the leg into origin and destination airports
-            echo __METHOD__ . ": Calling getAirLabsRoutes for leg $i/" . count($legs) . " $leg" . $this->LINEENDING;
+            echo __METHOD__ . ": Calling getAirLabsRoutes for leg ".($i+1)."/" . count($legs) . " $leg" . $this->LINEENDING;
             $airports = explode('-', $leg);
             //echo "<pre>airports ".print_r($airports,true)."</pre>";
 
             //var_dump($airports);
-            $originAirport = $airports[0];
-            $destinationAirport = $airports[1];
+            $originAirport = trim($airports[0]);
+            $destinationAirport = trim($airports[1]);
 
             // Call the AirLabsRoutes API to get all flights for this leg
             $flightsForLeg = $this->airlabsConnection->getAirLabsRoutes($originAirport, $destinationAirport);
