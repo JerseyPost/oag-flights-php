@@ -48,6 +48,10 @@ echo $htmlTable;
 
 ?>
 
+<form action="purgefiles.php" method="post">
+    <input type="submit" value="Purge all files">
+</form>
+
 <h1>File Upload Form</h1>
 
 <form action="upload.php" method="post" enctype="multipart/form-data">

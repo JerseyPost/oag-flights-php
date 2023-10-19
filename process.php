@@ -1,6 +1,8 @@
 <?php
 require_once 'bootstrap.php';
 
+set_time_limit(7200); // 7200 = 2hr
+
 // Get the directory path of the folder to scan.
 $folderPath = "./uploads";
 

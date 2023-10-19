@@ -31,10 +31,14 @@ $result = move_uploaded_file($_FILES["file"]["tmp_name"], $uploadDirectory . "/"
 
 // Display a success message to the user.
 if ($result) {
-    echo "The file was uploaded successfully to ".$uploadDirectory . "/" . $fileName;
+    header("Location: index.php");
+    exit();
+    //echo "The file was uploaded successfully to ".$uploadDirectory . "/" . $fileName;
 } else {
     echo "The file FAILED to upload to ".$uploadDirectory . "/" . $fileName;
 }
+
+/*
 
 // ----------------------------------
 
@@ -71,11 +75,18 @@ $htmlTable .= "</table>";
 
 // Echo the HTML table to the screen.
 echo $htmlTable;
-
-
-
+*/
 ?>
+
+<!--
+<form action="purgefiles.php" method="post">
+    <input type="submit" value="Purge all files">
+</form>
+
+
+
 
 <form action="process.php" method="post">
     <input type="submit" value="Process">
 </form>
+-->
