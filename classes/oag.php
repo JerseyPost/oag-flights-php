@@ -10,7 +10,7 @@ error_reporting(E_ALL);
 class OAGFileProcessor
 {
     const doflights = true;
-    const doroutes = false;
+    const doroutes = true;
     const uploadsfolder = 'uploads/';
     const downloadsfolder = 'downloads/';
     //const LINEENDING = PHP_EOL;
