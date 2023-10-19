@@ -31,6 +31,7 @@ $result = move_uploaded_file($_FILES["file"]["tmp_name"], $uploadDirectory . "/"
 
 // Display a success message to the user.
 if ($result) {
+    file_put_contents(tempnam('uploads/', 'deleteme_'), uniqid());
     header("Location: index.php");
     exit();
     //echo "The file was uploaded successfully to ".$uploadDirectory . "/" . $fileName;

@@ -33,13 +33,13 @@ class OAGFileProcessor
         if (SELF::doflights) {
             echo "Starting with Flights File $incomingflightsfile" . self::LINEENDING;
 
-            $flightFromFlightFile = $oagflightsObj->fetchFlightsFromFlightsFile(self::uploadsfolder.$incomingflightsfile);
+            $flightFromFlightFile = $oagflightsObj->fetchFlightsFromFlightsFile(self::uploadsfolder . $incomingflightsfile);
 
             if ($flightFromFlightFile !== false) {
 
                 extract($oagflightsObj->getAirportAndRoutDataForFlightNumbers($flightFromFlightFile));
 
-                $flightsfile = self::downloadsfolder.'oagflightsresults_' . $datetimestamp . '.csv';
+                $flightsfile = self::downloadsfolder . 'oagflightsresults_' . $datetimestamp . '.csv';
                 $oagflightsObj->getFlightDetailsAndOutputCSV($flightsArray, $flightsfile);
 
                 echo "MISSING FLIGHTS (from FLIGHTS)" . self::LINEENDING;
@@ -52,10 +52,10 @@ class OAGFileProcessor
         if (self::doroutes) {
             echo "Starting with Routes File $incomingroutesfile" . self::LINEENDING;
 
-            $uniqueLegs = $oagroutesObj->fetchUniqueLegsFromRoutesFile(self::uploadsfolder.$incomingroutesfile);
+            $uniqueLegs = $oagroutesObj->fetchUniqueLegsFromRoutesFile(self::uploadsfolder . $incomingroutesfile);
 
             extract($oagroutesObj->findFlightsForLegs($uniqueLegs));
-            $routesfile = self::downloadsfolder.'oagroutessresults_' . $datetimestamp . '.csv';
+            $routesfile = self::downloadsfolder . 'oagroutessresults_' . $datetimestamp . '.csv';
             $oagroutesObj->getFlightDetailsAndOutputCSV($flightsArray, $routesfile);
 
             echo "MISSING FLIGHTS (from ROUTES)" . self::LINEENDING;
@@ -89,17 +89,17 @@ class OAGFileProcessor
 
         // Save the concatenated content to a new file
         $combinedFilename = "combined_$datetimestamp.csv";
-        file_put_contents(self::downloadsfolder.$combinedFilename, $combinedContent);
+        file_put_contents(self::downloadsfolder . $combinedFilename, $combinedContent);
         echo "Combined file is $combinedFilename" . self::LINEENDING;
 
 
-// Create an HTML form with a download button.
-$htmlForm = "<form action='download.php' method='post'>";
-$htmlForm .= "<input type='hidden' name='fileName' value='$combinedFilename'>";
-$htmlForm .= "<input type='submit' value='Download'>";
-$htmlForm .= "</form>";
+        // Create an HTML form with a download button.
+        $htmlForm = "<br/><br/><br/><form action='download.php' method='post'>";
+        $htmlForm .= "<input type='hidden' name='fileName' value='$combinedFilename'>";
+        $htmlForm .= "<input type='submit' value='Download $combinedFilename'>";
+        $htmlForm .= "</form>";
 
-// Echo the HTML form to the screen.
-echo $htmlForm;
+        // Echo the HTML form to the screen.
+        echo $htmlForm;
     }
 }
