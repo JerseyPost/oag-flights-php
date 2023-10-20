@@ -11,6 +11,8 @@ class AirLabs
     private $api_key = 'b9314148-a8e3-4abf-a9f4-e0036e2f8682'; // 1204
 
     const base_url = 'https://airlabs.co/api/v9';
+    const LINEENDING = '<br/>';
+    
     private $numcallsmade = 0;
 
     private $airports = [];
@@ -19,8 +21,8 @@ class AirLabs
     function __construct()
     {
         // check if AIRLABS_API_KEY env variable exists
-        $api_env =getenv('AIRLABS_API_KEY');
-        echo "AIRLABS_API_KEY = $api_env".PHP_EOL;
+        $api_env = getenv('AIRLABS_API_KEY');
+        echo "AIRLABS_API_KEY = $api_env".self::LINEENDING;
         if (!empty($api_env) && preg_match('/^[0-9a-z-]{36}$/', $api_env)) {
             $this->api_key = $api_env;
         } else {
@@ -169,7 +171,7 @@ class AirLabs
     {
 
         if (!empty($this->airports[$airport_iata])) {
-            echo __METHOD__.": Using cached data for $airport_iata".PHP_EOL;
+            echo __METHOD__.": Using cached data for $airport_iata".self::LINEENDING;
             //print_r($this->airports[$airport_iata]);
             return $this->airports[$airport_iata];
         }

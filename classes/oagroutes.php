@@ -33,10 +33,10 @@ class OAGRoutes extends OAGBase
             // Read each row of the CSV
             while (($data = fgetcsv($handle)) !== FALSE) {
                 if (strtolower(trim($data[$MailCategory])) == 'a') {
-                    if (!empty(trim($data[$leg1Index]))) $legsArray[] = trim($data[$leg1Index]);
-                    if (!empty(trim($data[$leg2Index]))) $legsArray[] = trim($data[$leg2Index]);
-                    if (!empty(trim($data[$leg3Index]))) $legsArray[] = trim($data[$leg3Index]);
-                    if (!empty(trim($data[$leg4Index]))) $legsArray[] = trim($data[$leg4Index]);
+                    if (!empty(trim($data[$leg1Index]))) $legsArray[] = preg_replace('/\s+/', '', $data[$leg1Index]);
+                    if (!empty(trim($data[$leg2Index]))) $legsArray[] = preg_replace('/\s+/', '', $data[$leg2Index]);
+                    if (!empty(trim($data[$leg3Index]))) $legsArray[] = preg_replace('/\s+/', '', $data[$leg3Index]);
+                    if (!empty(trim($data[$leg4Index]))) $legsArray[] = preg_replace('/\s+/', '', $data[$leg4Index]);
                 }
             }
 
