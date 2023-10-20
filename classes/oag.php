@@ -44,6 +44,9 @@ class OAGFileProcessor
 
                 echo "MISSING FLIGHTS (from FLIGHTS)" . self::LINEENDING;
                 print_r($missingFlights);
+                $airlabsConnection->persistCache('flights');
+                $airlabsConnection->persistCache('routes');
+                $airlabsConnection->persistCache('airports');
             }
         } // doflights
 
@@ -60,6 +63,10 @@ class OAGFileProcessor
 
             echo "MISSING FLIGHTS (from ROUTES)" . self::LINEENDING;
             print_r($missingFlights);
+            $airlabsConnection->persistCache('flights');
+            $airlabsConnection->persistCache('routes');
+            $airlabsConnection->persistCache('airports');
+
         }
 
         // Get content of the two files

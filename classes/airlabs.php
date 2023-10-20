@@ -37,6 +37,10 @@ class AirLabs
         // Load local airports file into memory so we can use a local cache of them
         // TBC
 
+        foreach (self::CACHETYPES as $ct) {
+            $this->cache[$ct] = [];
+        }
+
         if (!$ignoreCache) {
             foreach (self::CACHETYPES as $ct) {
                 $this->populateCacheFromFile($ct);
@@ -78,6 +82,7 @@ class AirLabs
                 // Check if the JSON decoding was successful
                 //var_dump($data); // Display the array
                 $this->cache[$datatype] = $data;
+                echo "Array read from $filePath as JSON.:".json_encode($data).self::LINEENDING;
             } else {
                 echo "Failed to decode JSON.";
                 $this->cache[$datatype] = [];
@@ -90,7 +95,7 @@ class AirLabs
     function deleteCache(string $datatype) {
         $filePath = self::CACHEFOLDER . $datatype . '.json';
         unlink($filePath);
-        echo "$filePath Caxche file deleted".self::LINEENDING;
+        echo "$filePath Cache file deleted".self::LINEENDING;
     }
 
     function persistCache(string $datatype)
@@ -100,7 +105,7 @@ class AirLabs
         // Encode the array to a JSON string and write it to the file
         file_put_contents($filePath, json_encode($this->cache[$datatype]));
 
-        echo "Array written to the file $filePath as JSON.";
+        echo "Array written to the file $filePath as JSON.".self::LINEENDING;
     }
 
     private function cacheAirlabData(string $datatype, array $query, $data)
