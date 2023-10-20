@@ -67,6 +67,9 @@
         <input name="flightslimit" type="number" value="1">
         <label for="">Routes Limit</label>
         <input name="routeslimit" type="number" value="3">
+        <br/>
+        <label for="html">Ignore Cache:</label>
+        <input type="checkbox" name="ignoreCache" value="1" id="ignoreCache">
         <input type="submit" value="Process Latest Flights and Routes files in upload folder">
     </form>
 

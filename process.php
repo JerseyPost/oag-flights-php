@@ -3,6 +3,7 @@ require_once 'bootstrap.php';
 
 $flightslimit = filter_input(INPUT_POST,'flightslimit', FILTER_SANITIZE_NUMBER_INT );
 $routeslimit = filter_input(INPUT_POST,'routeslimit', FILTER_SANITIZE_NUMBER_INT );
+$routeslimit = filter_input(INPUT_POST,'ignoreCache', FILTER_SANITIZE_NUMBER_INT );
 
 set_time_limit(7200); // 7200 = 2hr
 
@@ -46,4 +47,4 @@ if ($mostRecentRoutesFile) {
 }
 
 
-OAGFileProcessor::run($mostRecentFlightsFile["file"], $mostRecentRoutesFile["file"], $flightslimit, $routeslimit);
+OAGFileProcessor::run($mostRecentFlightsFile["file"], $mostRecentRoutesFile["file"], $flightslimit, $routeslimit, $ignoreCache);

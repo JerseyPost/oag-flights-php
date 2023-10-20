@@ -15,13 +15,16 @@ class AirLabs
 
     private $numcallsmade = 0;
 
-    private $airports = [];
+    //private $airports = [];
 
-    private $routesCache = [];
-    private $flightsCache = [];
+    const CACHEFOLDER = 'cache/';
+    const CACHETYPES = ['routes', 'flights', 'airports'];
+
+    private $cache = [];
 
 
-    function __construct()
+
+    function __construct(bool $ignoreCache = false)
     {
         // check if AIRLABS_API_KEY env variable exists
         $api_env = getenv('AIRLABS_API_KEY');
@@ -33,6 +36,12 @@ class AirLabs
         }
         // Load local airports file into memory so we can use a local cache of them
         // TBC
+
+        if (!$ignoreCache) {
+            foreach (self::CACHETYPES as $ct) {
+                $this->populateCacheFromFile($ct);
+            }
+        }
     }
 
     function extractFlightDetails($flight_iata)
@@ -54,32 +63,52 @@ class AirLabs
         return $this->numcallsmade;
     }
 
+    function populateCacheFromFile(string $datatype)
+    {
+        $filePath = self::CACHEFOLDER . $datatype . '.json';
+
+        if (file_exists($filePath)) {
+            // Read the JSON content from the file
+            $jsonContent = file_get_contents($filePath);
+
+            // Decode the JSON content into a PHP array
+            $data = json_decode($jsonContent, true);
+
+            if ($data !== null) {
+                // Check if the JSON decoding was successful
+                //var_dump($data); // Display the array
+                $this->cache[$datatype] = $data;
+            } else {
+                echo "Failed to decode JSON.";
+                $this->cache[$datatype] = [];
+            }
+        } else {
+            echo "File $filePath not found.";
+        }
+    }
+
+    function persistCache(string $datatype)
+    {
+        $filePath = self::CACHEFOLDER . $datatype . '.json';
+
+        // Encode the array to a JSON string and write it to the file
+        file_put_contents($filePath, json_encode($this->cache[$datatype]));
+
+        echo "Array written to the file $filePath as JSON.";
+    }
+
     private function cacheAirlabData(string $datatype, array $query, $data)
     {
-        switch ($datatype) {
-            case 'routes':
-                $this->routesCache[implode('-', $query)] = $data;
-                break;
-            case 'flights':
-                $this->flightsCache[implode('-', $query)] = $data;
-                break;
-        }
+        $this->cache[$datatype][implode('-', $query)] = $data;
     }
 
     private function checkCache(string $datatype, array $query)
     {
         $cacheIdx = implode('-', $query);
-        switch ($datatype) {
-            case 'routes':
-                $cacheHit = $this->routesCache[$cacheIdx] ?? false;
-                break;
-            case 'routes':
-                $cacheHit = $this->flightsCache[$cacheIdx] ?? false;
-                break;
-        }
+        $cacheHit = $this->cache[$datatype][$cacheIdx] ?? false;
 
         if ($cacheHit) {
-            echo "CachHit: $cacheIdx > $cacheHit".self::LINEENDING;
+            echo "CacheHit: $cacheIdx > $cacheHit" . self::LINEENDING;
         }
         return $cacheHit;
     }
@@ -221,12 +250,18 @@ class AirLabs
 
     function getAirLabsAirportDetails($airport_iata): array|bool
     {
+        $cacheHit = $this->checkCache('airports', [$airport_iata]);
+        if (!empty($cacheHit)) {
+            return $cacheHit;
+        }
 
+        /*
         if (!empty($this->airports[$airport_iata])) {
             echo __METHOD__ . ": Using cached data for $airport_iata" . self::LINEENDING;
             //print_r($this->airports[$airport_iata]);
             return $this->airports[$airport_iata];
         }
+        */
 
         //echo "In ".__FUNCTION__."($flight_iata)";
         $url = self::base_url . '/airports';
@@ -266,8 +301,17 @@ class AirLabs
             //echo "<pre>getAirLabsAirportDetails: $airport_iata " . print_r($res['error'], true) . "</pre>";
             return false;
         }
+
+        /*
         // cache result so we can save on API calls
         $this->airports[$airport_iata] = $res['response'];
+        */
+
+        $this->cacheAirlabData(
+            'airports',
+            [$airport_iata],
+            $res['response']
+        );
 
         return $res['response'];
     } //getAirLabsAirportDetails
