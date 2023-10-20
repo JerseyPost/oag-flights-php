@@ -61,6 +61,12 @@
         <input type="submit" value="Upload File">
     </form>
 
+    <h1>Delete Cache</h1>
+
+    <form action="deletecache.php" method="post">
+        <input type="submit" value="Delete Flights, Routes and Airports Cache Files">
+    </form>
+
     <h1>Process Files</h1>
     <form action="process.php" method="post">
         <label for="">Flights Limit</label>

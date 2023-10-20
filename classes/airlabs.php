@@ -87,6 +87,12 @@ class AirLabs
         }
     }
 
+    function deleteCache(string $datatype) {
+        $filePath = self::CACHEFOLDER . $datatype . '.json';
+        unlink($filePath);
+        echo "$filePath Caxche file deleted".self::LINEENDING;
+    }
+
     function persistCache(string $datatype)
     {
         $filePath = self::CACHEFOLDER . $datatype . '.json';
