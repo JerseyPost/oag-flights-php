@@ -9,7 +9,7 @@ class JPUtils
         // PHP8 only: fputcsv($handle, $data, ',', '"', '\\', "\r\n");  // Write the data to the stream in CSV format, and force Windows EOL
         fputcsv($handle, $data, ',', '"');
         // Add "\r\n" manually for line endings
-        fwrite($handle, "\n");
+        fwrite($handle, "\r");
         rewind($handle);  // Rewind the stream to the beginning
         $csvContent = stream_get_contents($handle);  // Read the contents of the stream
         fclose($handle);  // Close the stream
