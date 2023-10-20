@@ -71,12 +71,17 @@ class AirLabs
         $cacheIdx = implode('-', $query);
         switch ($datatype) {
             case 'routes':
-                $cacheHit = $this->routesCache[$cacheIdx];
+                $cacheHit = $this->routesCache[$cacheIdx] ?? false;
                 break;
             case 'routes':
-                $cacheHit = $this->flightsCache[$cacheIdx];
+                $cacheHit = $this->flightsCache[$cacheIdx] ?? false;
                 break;
         }
+
+        if ($cacheHit) {
+            echo "CachHit: $cacheIdx > $cacheHit".self::LINEENDING;
+        }
+        return $cacheHit;
     }
 
     function getAirLabsRoutes(string $originAirport = null, string $destinationAirport = null, string $flight_iata = null): array|bool
