@@ -2,7 +2,7 @@
 
 
 class AirLabs
-{ 
+{
     //const api_key = 'fff37b56-bfae-4d80-ba8a-6ba97c40d314'; // foood
     //const api_key = 'dda49d10-932f-4c43-912a-39be23c951f7'; // cricket
     //const api_key = 'ff2a122d-f424-429c-a365-4e5f0337b5d5'; // 1359
@@ -12,17 +12,20 @@ class AirLabs
 
     const base_url = 'https://airlabs.co/api/v9';
     const LINEENDING = '<br/>';
-    
+
     private $numcallsmade = 0;
 
     private $airports = [];
+
+    private $routesCache = [];
+    private $flightsCache = [];
 
 
     function __construct()
     {
         // check if AIRLABS_API_KEY env variable exists
         $api_env = getenv('AIRLABS_API_KEY');
-        echo "AIRLABS_API_KEY = $api_env".self::LINEENDING;
+        echo "AIRLABS_API_KEY = $api_env" . self::LINEENDING;
         if (!empty($api_env) && preg_match('/^[0-9a-z-]{36}$/', $api_env)) {
             $this->api_key = $api_env;
         } else {
@@ -32,25 +35,57 @@ class AirLabs
         // TBC
     }
 
-    function extractFlightDetails($flight_iata) {
+    function extractFlightDetails($flight_iata)
+    {
         $pattern = '/^([A-Z][A-Z0-9])(\d{1,4})$/';
-    
+
         if (preg_match($pattern, trim($flight_iata), $matches)) {
             return [
                 'airlineCode' => $matches[1],
                 'flightNumber' => (int)$matches[2]  // dump leading zeroes
             ];
         }
-    
+
         return null;
     }
 
-    function getNumcallsmade() {
+    function getNumcallsmade()
+    {
         return $this->numcallsmade;
     }
 
-    function getAirLabsRoutes(string $originAirport=null, string $destinationAirport=null, string $flight_iata=null): array|bool
+    private function cacheAirlabData(string $datatype, array $query, $data)
     {
+        switch ($datatype) {
+            case 'routes':
+                $this->routesCache[implode('-', $query)] = $data;
+                break;
+            case 'flights':
+                $this->flightsCache[implode('-', $query)] = $data;
+                break;
+        }
+    }
+
+    private function checkCache(string $datatype, array $query)
+    {
+        $cacheIdx = implode('-', $query);
+        switch ($datatype) {
+            case 'routes':
+                $cacheHit = $this->routesCache[$cacheIdx];
+                break;
+            case 'routes':
+                $cacheHit = $this->flightsCache[$cacheIdx];
+                break;
+        }
+    }
+
+    function getAirLabsRoutes(string $originAirport = null, string $destinationAirport = null, string $flight_iata = null): array|bool
+    {
+
+        $cacheHit = $this->checkCache('routes', [$originAirport, $destinationAirport, $flight_iata]);
+        if (!empty($cacheHit)) {
+            return $cacheHit;
+        }
 
         //echo "In ".__FUNCTION__;
         $url = self::base_url . '/routes';
@@ -70,7 +105,6 @@ class AirLabs
                 'airline_iata' => $airlineCode,
                 'flight_number' => $flightNumber
             ];
-
         } elseif (empty($originAirport) && empty($destinationAirport) && !empty($flight_iata)) {
 
             extract($this->extractFlightDetails($flight_iata));
@@ -80,9 +114,7 @@ class AirLabs
                 'airline_iata' => $airlineCode,
                 'flight_number' => $flightNumber
             ];
-
-
-        } else  {
+        } else {
             $params = [
                 'api_key' => $this->api_key,
                 'dep_iata' => $originAirport,
@@ -98,7 +130,7 @@ class AirLabs
         curl_setopt($ch, CURLOPT_URL, $fullUrl);
         https: //www.w3schools.com/php/php_switch.asp
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch,CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
         // Execute the cURL request
         $this->numcallsmade++;
@@ -118,11 +150,21 @@ class AirLabs
             echo "<pre>getAirLabsRoutes: $originAirport, $destinationAirport " . print_r($res['error'], true) . "</pre>";
             return false;
         }
+
+        $this->cacheAirlabData(
+            'routes',
+            [$originAirport, $destinationAirport, $flight_iata],
+            $res['response']
+        );
         return $res['response'];
     } //getAirLabsRoutes
 
     function getAirLabsFlighDetails($flight_iata): array|bool
     {
+        $cacheHit = $this->checkCache('flights', [$flight_iata]);
+        if (!empty($cacheHit)) {
+            return $cacheHit;
+        }
 
         //echo "In ".__FUNCTION__."($flight_iata)";
         $url = self::base_url . '/flight';
@@ -142,7 +184,7 @@ class AirLabs
         // Set cURL options
         curl_setopt($ch, CURLOPT_URL, $fullUrl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch,CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
         // Execute the cURL request
         $this->numcallsmade++;
@@ -162,6 +204,11 @@ class AirLabs
             //echo "<pre>getAirLabsFlighDetails: $flight_iata " . print_r($res['error'], true) . "</pre>";
             return false;
         }
+        $this->cacheAirlabData(
+            'flights',
+            [$flight_iata],
+            $res['response']
+        );
         return $res['response'];
     } //getAirLabsFlighDetails
 
@@ -171,7 +218,7 @@ class AirLabs
     {
 
         if (!empty($this->airports[$airport_iata])) {
-            echo __METHOD__.": Using cached data for $airport_iata".self::LINEENDING;
+            echo __METHOD__ . ": Using cached data for $airport_iata" . self::LINEENDING;
             //print_r($this->airports[$airport_iata]);
             return $this->airports[$airport_iata];
         }
@@ -194,7 +241,7 @@ class AirLabs
         // Set cURL options
         curl_setopt($ch, CURLOPT_URL, $fullUrl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch,CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
         // Execute the cURL request
         $this->numcallsmade++;
