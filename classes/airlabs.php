@@ -108,7 +108,7 @@ class AirLabs
         $cacheHit = $this->cache[$datatype][$cacheIdx] ?? false;
 
         if ($cacheHit) {
-            echo "CacheHit: $cacheIdx > $cacheHit" . self::LINEENDING;
+            echo "CacheHit: $cacheIdx > ".json_encode($cacheHit) . self::LINEENDING;
         }
         return $cacheHit;
     }

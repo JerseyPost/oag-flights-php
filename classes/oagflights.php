@@ -16,8 +16,8 @@ class OAGFlights extends OAGBase
    
     function fetchFlightsFromFlightsFile(string $filename): array | bool
     {
-        echo "In function ".__METHOD__.$this->LINEENDING;
-        echo "Reading $filename".$this->LINEENDING;
+        echo "In function ".__METHOD__.self::LINEENDING;
+        echo "Reading $filename".self::LINEENDING;
 
         // Open the CSV file
         if (($handle = fopen($filename, "r")) !== FALSE) {
@@ -39,7 +39,7 @@ class OAGFlights extends OAGBase
             print_r($thirdColumnValues);
             return $thirdColumnValues;
         } else {
-            echo "Error: Unable to open the file.".$this->LINEENDING;
+            echo "Error: Unable to open the file.".self::LINEENDING;
             return false;
         }
     } // fetchFlightsFromFlightsFile
@@ -51,7 +51,7 @@ class OAGFlights extends OAGBase
     {
 
 
-        echo __FUNCTION__." LIMIT set to $this->limit !!!".$this->LINEENDING;
+        echo __FUNCTION__." LIMIT set to $this->limit !!!".self::LINEENDING;
 
         // Create a Set to store unique flights
         $uniqueFlights = [];
@@ -59,14 +59,14 @@ class OAGFlights extends OAGBase
 
         //echo "HERE *$limit*".__LINE__;
         $flightNumbers = array_slice($flightNumbers, 0, !empty($this->limit) ? $this->limit : 999999);
-        echo "Flights to process: " . count($flightNumbers) . $this->LINEENDING;
+        echo "Flights to process: " . count($flightNumbers) . self::LINEENDING;
         //die();
         // Iterate through the flight numbers and lookup the arrival and departure airports
         $c = 1;
         foreach ($flightNumbers as $flight_iata) {
 
             /*
-            echo "Calling getAirLabsFlight for  $c/" . count($flightNumbers) . " $flight_iata" . $this->LINEENDING;
+            echo "Calling getAirLabsFlight for  $c/" . count($flightNumbers) . " $flight_iata" . self::LINEENDING;
             $flightDetails = $this->airlabsConnection->getAirLabsFlighDetails($flight_iata);
 
             if (empty($flightDetails)) {
@@ -74,7 +74,7 @@ class OAGFlights extends OAGBase
                 $c++;
                 continue;
             }
-            echo "Calling getAirLabsRoutes for leg " . $flightDetails['dep_iata'] . "-" . $flightDetails['arr_iata'] . " $flight_iata" . $this->LINEENDING;
+            echo "Calling getAirLabsRoutes for leg " . $flightDetails['dep_iata'] . "-" . $flightDetails['arr_iata'] . " $flight_iata" . self::LINEENDING;
             */
             //echo "<pre>airports ".print_r($airports,true)."</pre>";
 
@@ -83,7 +83,7 @@ class OAGFlights extends OAGBase
             //$destinationAirport = $flightDetails['arr_iata'];
 
             // Call the AirLabsRoutes API to get all flights for this leg
-            echo __METHOD__.": Calling getAirLabsRoutes $flight_iata" . $this->LINEENDING;
+            echo __METHOD__.": Calling getAirLabsRoutes $flight_iata" . self::LINEENDING;
 
             $flightsForLeg = $this->airlabsConnection->getAirLabsRoutes(null, null, $flight_iata);
             if (empty($flightsForLeg)) {
@@ -108,7 +108,7 @@ class OAGFlights extends OAGBase
         //echo "///////////////////////////";
         //var_dump($flightsArray);
         //echo "<pre>flightsArray ".print_r($flightsArray,true)."</pre>";
-        echo "flightsArray:" . count($flightsArray) . $this->LINEENDING;
+        echo "flightsArray:" . count($flightsArray) . self::LINEENDING;
         return ['flightsArray'=>$flightsArray, 'missingFlights'=>$missingFlights];
         //die();
     } // getAirportAndRoutDataForFlightNumbers

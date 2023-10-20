@@ -6,7 +6,7 @@ class OAGBase {
     protected $lastSundayInOctober;
     protected $lastSundayInMarch;
 
-    protected $LINEENDING = '<br/>';
+    const LINEENDING = '<br/>';
 
     protected $limit;
 
@@ -28,8 +28,8 @@ class OAGBase {
 
     function getFlightDetailsAndOutputCSV(array $flightsArray, string $outputfilename)
     {
-        echo "-----------------------------------".PHP_EOL;
-        echo "In ".__METHOD__.PHP_EOL;
+        echo "-----------------------------------".self::LINEENDING;
+        echo "In ".__METHOD__.self::LINEENDING;
 
         $missingFlights = [];
 
@@ -54,7 +54,7 @@ class OAGBase {
                 foreach ($flightsArray as $fi => $flight) {
                     // Calculate the arrival day
                     $arrivalDay = JPUtils::calculateArrivalDay($flight['dep_time_utc'], $flight['duration']);
-                    echo __METHOD__.": ($c/$total) Getting details for " . $flight['flight_iata'] . PHP_EOL;
+                    echo __METHOD__.": ($c/$total) Getting details for " . $flight['flight_iata'] . self::LINEENDING;
                     $c++;
 
                     //echo "HERE3 ".$arrivalDay;
@@ -80,7 +80,7 @@ class OAGBase {
                     $flightDetails['arr_country'] = $arr_airportDetails[0]['country_code'];
                     
                     //$flightDetails = $this->airlabsConnection->getAirLabsFlighDetails($flight['flight_iata']);
-                    echo "Calls to AirLabs so far: " . $this->airlabsConnection->getNumcallsmade() . PHP_EOL;
+                    echo "Calls to AirLabs so far: " . $this->airlabsConnection->getNumcallsmade() . self::LINEENDING;
 
                     //echo "<pre>flightDetails " . print_r($flightDetails, true) . "</pre>";
                     if (empty($flightDetails)) {
@@ -134,7 +134,7 @@ class OAGBase {
 
                     echo $csvdata;
 
-                    echo "Calls to AirLabs so far: " . $this->airlabsConnection->getNumcallsmade() . PHP_EOL;
+                    echo "Calls to AirLabs so far: " . $this->airlabsConnection->getNumcallsmade() . self::LINEENDING;
                 } // for each flightsArray
 
                 // Close the file
@@ -145,10 +145,10 @@ class OAGBase {
 
 
 
-            echo "DONE".PHP_EOL;
+            echo "DONE".self::LINEENDING;
         } catch (Exception $e) {
             fclose($file);
-            echo "DONE - With Exception ". $e->getMessage().PHP_EOL;
+            echo "DONE - With Exception ". $e->getMessage().self::LINEENDING;
         }
 
         print_r($missingFlights);
