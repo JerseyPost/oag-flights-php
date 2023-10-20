@@ -2,7 +2,7 @@
 
 class AirLabs
 {
-    protected $api_key = ''; // 1204
+    protected $api_key = '822be1f6-6997-42ad-9898-40326906b37e'; // JP
 
     const base_url = 'https://airlabs.co/api/v9';
     const LINEENDING = '<br/>';
