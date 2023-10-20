@@ -1,17 +1,17 @@
 {
-    "name": "digitalocean-apps/sample-php",
-    "description": "Sample PHP application for App Platform",
+    "name": "jerseypost/oag-flights-php",
+    "description": "OAG File App",
     "type": "project",
     "require": {
-        "alrik11es/cowsayphp": "^1.2"
+        
     },
     "autoload": {
         "classmap": ["classes/"]
     },
     "authors": [
         {
-            "name": "Kamal Nasser",
-            "email": "kamal@digitalocean.com"
+            "name": "Russell Hutson",
+            "email": "russell.hutson@jerseypost.com"
         }
     ]
 }
