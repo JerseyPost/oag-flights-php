@@ -3,9 +3,10 @@
 
 <head>
     <title>File Upload Form</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/css/bootstrap.min.css">
 </head>
 
-<body>
+<body class="container">
 
     <?php
     ini_set('display_errors', 1);
@@ -17,23 +18,23 @@
     // Get an array of all the files in the upload folder.
     $files = scandir($uploadDirectory);
 
-    echo "<h1>Currently uploaded files</h1>";
+    echo "<h1 class='mt-4'>Currently uploaded files</h1>";
 
-    // Create an empty HTML table.
-    $htmlTable = "<table>";
+    // Create an empty HTML table with Bootstrap table classes.
+    $htmlTable = "<table class='table table-striped table-bordered table-hover mt-2'>";
 
-    // Add a table header row.
-    $htmlTable .= "<thead>";
+    // Add a table header row with Bootstrap table classes.
+    $htmlTable .= "<thead class='thead-dark'>";
     $htmlTable .= "<tr>";
     $htmlTable .= "<th>File Name</th>";
     $htmlTable .= "<th>Timestamp</th>";
     $htmlTable .= "</tr>";
     $htmlTable .= "</thead>";
 
-    // Add a table body row for each file.
+    // Add a table body row for each file with Bootstrap table classes.
     $htmlTable .= "<tbody>";
     foreach ($files as $file) {
-        if ($file != "." && $file != ".." && $file != "index.php" && stripos($file, 'deleteme')===false) {
+        if ($file != "." && $file != ".." && $file != "index.php" && stripos($file, 'deleteme') === false) {
             $htmlTable .= "<tr>";
             $htmlTable .= "<td>" . $file . "</td>";
             $htmlTable .= "<td>" . date("Y-m-d H:i:s", filemtime($uploadDirectory . "/" . $file)) . "</td>";
@@ -51,32 +52,40 @@
     ?>
 
     <form action="purgefiles.php" method="post">
-        <input type="submit" value="Purge all files">
+        <button type="submit" class="btn btn-danger mt-3">Purge all files</button>
     </form>
 
-    <h1>File Upload Form</h1>
+    <h1 class="mt-4">File Upload Form</h1>
 
     <form action="upload.php" method="post" enctype="multipart/form-data">
-        <input type="file" name="file">
-        <input type="submit" value="Upload File">
+        <div class="mb-3">
+            <label for="file" class="form-label">Choose a file to upload:</label>
+            <input type="file" class="form-control" name="file" id="file">
+        </div>
+        <button type="submit" class="btn btn-primary">Upload File</button>
     </form>
 
-    <h1>Delete Cache</h1>
+    <h1 class="mt-4">Delete Cache</h1>
 
     <form action="deletecache.php" method="post">
-        <input type="submit" value="Delete Flights, Routes and Airports Cache Files">
+        <button type="submit" class="btn btn-danger">Delete Flights, Routes and Airports Cache Files</button>
     </form>
 
-    <h1>Process Files</h1>
+    <h1 class="mt-4">Process Files</h1>
     <form action="process.php" method="post">
-        <label for="">Flights Limit</label>
-        <input name="flightslimit" type="number" value="1">
-        <label for="">Routes Limit</label>
-        <input name="routeslimit" type="number" value="3">
-        <br/>
-        <label for="html">Ignore Cache:</label>
-        <input type="checkbox" name="ignoreCache" value="1" id="ignoreCache">
-        <input type="submit" value="Process Latest Flights and Routes files in upload folder">
+        <div class="mb-3">
+            <label for="flightslimit" class="form-label">Flights Limit</label>
+            <input name="flightslimit" type="number" class="form-control" value="1" id="flightslimit">
+        </div>
+        <div class="mb-3">
+            <label for="routeslimit" class="form-label">Routes Limit</label>
+            <input name="routeslimit" type="number" class="form-control" value="3" id="routeslimit">
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" name="ignoreCache" value="1" id="ignoreCache">
+            <label class="form-check-label" for="ignoreCache">Ignore Cache</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Process Latest Flights and Routes files in upload folder</button>
     </form>
 
 </body>
