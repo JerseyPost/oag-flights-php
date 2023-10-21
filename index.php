@@ -11,7 +11,7 @@
     <?php
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
+    error_reporting(E-ALL);
 
     $uploadDirectory = 'uploads/';
 
@@ -51,42 +51,42 @@
 
     ?>
 
-    <form action="purgefiles.php" method="post">
-        <button type="submit" class="btn btn-danger mt-3">Purge all files</button>
-    </form>
-
-    <h1 class="mt-4">File Upload Form</h1>
-
-    <form action="upload.php" method="post" enctype="multipart/form-data">
-        <div class="mb-3">
-            <label for="file" class="form-label">Choose a file to upload:</label>
-            <input type="file" class="form-control" name="file" id="file">
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <h1>File Upload Form</h1>
+            <form action="upload.php" method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="file" class="form-label">Choose a file to upload:</label>
+                    <input type="file" class="form-control" name="file" id="file">
+                </div>
+                <button type="submit" class="btn btn-primary">Upload File</button>
+            </form>
         </div>
-        <button type="submit" class="btn btn-primary">Upload File</button>
-    </form>
 
-    <h1 class="mt-4">Delete Cache</h1>
+        <div class="col-md-6">
+            <h1>Delete Cache</h1>
+            <form action="deletecache.php" method="post">
+                <button type="submit" class="btn btn-danger">Delete Flights, Routes and Airports Cache Files</button>
+            </form>
 
-    <form action="deletecache.php" method="post">
-        <button type="submit" class="btn btn-danger">Delete Flights, Routes and Airports Cache Files</button>
-    </form>
-
-    <h1 class="mt-4">Process Files</h1>
-    <form action="process.php" method="post">
-        <div class="mb-3">
-            <label for="flightslimit" class="form-label">Flights Limit</label>
-            <input name="flightslimit" type="number" class="form-control" value="1" id="flightslimit">
+            <h1 class="mt-4">Process Files</h1>
+            <form action="process.php" method="post">
+                <div class="mb-3">
+                    <label for="flightslimit" class="form-label">Flights Limit</label>
+                    <input name="flightslimit" type="number" class="form-control" value="1" id="flightslimit">
+                </div>
+                <div class="mb-3">
+                    <label for="routeslimit" class="form-label">Routes Limit</label>
+                    <input name="routeslimit" type="number" class="form-control" value="3" id="routeslimit">
+                </div>
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" name="ignoreCache" value="1" id="ignoreCache">
+                    <label class="form-check-label" for="ignoreCache">Ignore Cache</label>
+                </div>
+                <button type="submit" class="btn btn-primary">Process Latest Flights and Routes files in upload folder</button>
+            </form>
         </div>
-        <div class="mb-3">
-            <label for="routeslimit" class="form-label">Routes Limit</label>
-            <input name="routeslimit" type="number" class="form-control" value="3" id="routeslimit">
-        </div>
-        <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" name="ignoreCache" value="1" id="ignoreCache">
-            <label class="form-check-label" for="ignoreCache">Ignore Cache</label>
-        </div>
-        <button type="submit" class="btn btn-primary">Process Latest Flights and Routes files in upload folder</button>
-    </form>
+    </div>
 
 </body>
 
