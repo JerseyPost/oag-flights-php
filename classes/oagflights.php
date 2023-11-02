@@ -49,7 +49,42 @@ class OAGFlights extends OAGBase
 
         $c = 1;
         foreach ($flightNumbers as $flight_iata) {
-            // ... (unchanged code)
+            /*
+            echo "Calling getAirLabsFlight for  $c/" . count($flightNumbers) . " $flight_iata" . self::LINEENDING;
+            $flightDetails = $this->airlabsConnection->getAirLabsFlighDetails($flight_iata);
+            if (empty($flightDetails)) {
+                $missingFlights[] = "No flight details for $flight_iata";
+                $c++;
+                continue;
+            }
+            echo "Calling getAirLabsRoutes for leg " . $flightDetails['dep_iata'] . "-" . $flightDetails['arr_iata'] . " $flight_iata" . self::LINEENDING;
+            */
+            //echo "<pre>airports ".print_r($airports,true)."</pre>";
+
+            //var_dump($airports);
+            //$originAirport = $flightDetails['dep_iata'];
+            //$destinationAirport = $flightDetails['arr_iata'];
+
+            // Call the AirLabsRoutes API to get all flights for this leg
+            echo __METHOD__.": Calling getAirLabsRoutes $flight_iata" . self::LINEENDING;
+
+            $flightsForLeg = $this->airlabsConnection->getAirLabsRoutes(null, null, $flight_iata);
+            if (empty($flightsForLeg)) {
+                $missingFlights[] = __METHOD__.": No flight details for $flight_iata";
+                $c++;
+                continue;
+            }
+            //echo "<pre>flightsForLeg " . print_r($flightsForLeg, true) . "</pre>";
+            //var_dump($flightsForLeg);
+
+            // store this flights data from looking it up using Route API
+            foreach ($flightsForLeg as $flight) {
+                $uniqueFlights[hash('sha256', serialize($flight))] = $flight;
+            }
+            $c++;
+        } // foreach flight
+
+        //echo "HERE " . __LINE__;
         }
 
         $flightsArray = array_values($uniqueFlights);
