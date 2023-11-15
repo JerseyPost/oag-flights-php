@@ -30,12 +30,14 @@
 
     // Add a table body row for each file with Bootstrap table classes.
     $htmlTable .= "<tbody>";
+    $filecount = 0;
     foreach ($files as $file) {
         if ($file != "." && $file != ".." && $file != "index.php" && stripos($file, 'deleteme') === false) {
             $htmlTable .= "<tr>";
             $htmlTable .= "<td>" . $file . "</td>";
             $htmlTable .= "<td>" . date("Y-m-d H:i:s", filemtime($uploadDirectory . "/" . $file)) . "</td>";
             $htmlTable .= "</tr>";
+            $filecount++;
         }
     }
     $htmlTable .= "</tbody>";
@@ -47,11 +49,16 @@
     echo $htmlTable;
 ?>
 
+<?php
+if ($filecount>0) {
+    ?>
     <form action="purgefiles.php" method="GET">
     <button type="submit" class="btn btn-primary" onclick="confirm('Are you sure?')">Purge Files</button>
     </form>
-    
-  
+
+  <?php
+} 
+?>
     <div class="row mt-4">
         <div class="col-md-6">
             <h1>File Upload Form</h1>
