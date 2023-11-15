@@ -53,6 +53,10 @@ class AirLabs
         return $this->numcallsmade;
     }
 
+    private function displayRemainingCredits($response) {
+        echo "Credits: ".$response->response->key->limits_total.PHP_EOL;
+    }
+
     public function populateCacheFromFile(string $datatype)
     {
         $filePath = self::CACHEFOLDER . $datatype . '.json';
@@ -167,7 +171,9 @@ class AirLabs
         if (!empty($res['error'])) {
             echo "<pre>getAirLabsRoutes: $originAirport, $destinationAirport " . print_r($res['error'], true) . "</pre>";
             return false;
-        }
+        } 
+
+        $this->displayRemainingCredits($res);
 
         $this->cacheAirlabData(
             'routes',
@@ -212,6 +218,10 @@ class AirLabs
             //echo "<pre>getAirLabsFlighDetails: $flight_iata " . print_r($res['error'], true) . "</pre>";
             return false;
         }
+
+        $this->displayRemainingCredits($res);
+
+
         $this->cacheAirlabData(
             'flights',
             [$flight_iata],
@@ -255,6 +265,10 @@ class AirLabs
             //echo "<pre>getAirLabsAirportDetails: $airport_iata " . print_r($res['error'], true) . "</pre>";
             return false;
         }
+
+        $this->displayRemainingCredits($res);
+
+
 
         $this->cacheAirlabData(
             'airports',
