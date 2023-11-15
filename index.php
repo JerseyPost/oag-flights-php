@@ -50,6 +50,7 @@
     <form action="purgefiles.php" method="GET">
     <button type="submit" class="btn btn-primary" onclick="confirm('Are you sure?')">Purge Files</button>
     </form>
+    
   
     <div class="row mt-4">
         <div class="col-md-6">
