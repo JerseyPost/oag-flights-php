@@ -45,9 +45,12 @@
 
     // Echo the HTML table to the screen.
     echo $htmlTable;
+?>
 
-    ?>
-
+    <form action="purgefiles.php" method="GET">
+    <button type="submit" class="btn btn-primary" onclick="confirm('Are you sure?')">Purge Files</button>
+    </form>
+  
     <div class="row mt-4">
         <div class="col-md-6">
             <h1>File Upload Form</h1>
