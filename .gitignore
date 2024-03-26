@@ -2,3 +2,7 @@ composer.phar
 /vendor/
 uploads/
 downloads/
+composer.lock
+cache/airports.json
+cache/flights.json
+cache/routes.json
