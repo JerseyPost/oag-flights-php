@@ -6,11 +6,14 @@ class OAGBase {
     protected $lastSundayInOctober;
     protected $lastSundayInMarch;
 
+    protected $routeStartDate; // to replace $lastSundayInOctober
+    protected $routeEndDate; // to replace $lastSundayInMarch
+
     const LINEENDING = '<br/>';
 
     protected $limit;
 
-    function __construct($airlabsConnection = null, $limit=9999999)
+    function __construct($airlabsConnection = null, $limit=9999999, $routeStartDate=null, $routeEndDate=null)
     {
         if (!$airlabsConnection) {
             $this->airlabsConnection = new AirLabs();
@@ -21,9 +24,12 @@ class OAGBase {
         
         $this->limit = $limit; 
     
-
+        // RCH 20240326
         $this->lastSundayInOctober =  date('Ymd', strtotime('last Sunday of October ' . date('Y')));
         $this->lastSundayInMarch = JPUtils::getLastSundayInMarch();
+        
+        $this->routeStartDate = empty($routeStartDate) ? $this->lastSundayInMarch : $routeStartDate;
+        $this->routeEndDate = empty($routeEndDate) ? $this->lastSundayInOctober : $routeEndDate;
     }
 
     function getFlightDetailsAndOutputCSV(array $flightsArray, string $outputfilename)
@@ -124,8 +130,8 @@ class OAGBase {
                         $flightData['arrival_day'],
                         $flightData['daysstr'],
                         $flightData['num_stops'],
-                        $this->lastSundayInOctober,
-                        $this->lastSundayInMarch
+                        $this->routeStartDate,
+                        $this->routeEndDate
                     ];
 
                     // Write data to the file
