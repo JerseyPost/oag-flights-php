@@ -91,9 +91,20 @@ if ($filecount>0) {
                     <input type="checkbox" class="form-check-input" name="ignoreCache" value="1" id="ignoreCache">
                     <label class="form-check-label" for="ignoreCache">Ignore Cache</label>
                 </div>
+                </br>
+                <label for="routesStartDate">Routes Start Date</label>
+                <input type="date"  name="routesStartDate" id="routesStartDate"></br>
+                <label for="ignoreCache">Routes End Date</label>
+                <input type="date"  name="routesEndDate" value="<?php echo date('Ymd', strtotime('last Sunday of October ' . date('Y')));?>" id="routesEndDate">
+                </br></br>
                 <button type="submit" class="btn btn-primary">Process Latest Flights and Routes files in upload folder</button>
+                </br>
             </form>
         </div>
+    </div>
+
+    <div class="col-md-6">
+       Help: <a href="https://jerseypost.atlassian.net/wiki/spaces/ADT/pages/2365882384/PTC+OAG+File+-+API+based+replacement">https://jerseypost.atlassian.net/wiki/spaces/ADT/pages/2365882384/PTC+OAG+File+-+API+based+replacement</a>
     </div>
 
 </body>

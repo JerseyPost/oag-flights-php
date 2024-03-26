@@ -4,6 +4,10 @@ require_once 'bootstrap.php';
 $flightslimit = filter_input(INPUT_POST,'flightslimit', FILTER_SANITIZE_NUMBER_INT );
 $routeslimit = filter_input(INPUT_POST,'routeslimit', FILTER_SANITIZE_NUMBER_INT );
 $ignoreCache = filter_input(INPUT_POST,'ignoreCache', FILTER_SANITIZE_NUMBER_INT ) ? true : false;
+// RCH 20240326
+// Allow user to specify $routesStartDate, $routesEndDate
+$routesStartDate = filter_input(INPUT_POST,'routesStartDate', FILTER_SANITIZE_FULL_SPECIAL_CHARS ) ;
+$routesEndDate = filter_input(INPUT_POST,'routesEndDate', FILTER_SANITIZE_FULL_SPECIAL_CHARS ) ;
 
 set_time_limit(7200); // 7200 = 2hr
 
@@ -46,5 +50,6 @@ if ($mostRecentRoutesFile) {
     echo "No Routes files were found.\n";
 }
 
-
-OAGFileProcessor::run($mostRecentFlightsFile["file"], $mostRecentRoutesFile["file"], $flightslimit, $routeslimit, $ignoreCache);
+// RCH 20240326
+// Allow user to specify $routesStartDate, $routesEndDate
+OAGFileProcessor::run($mostRecentFlightsFile["file"], $mostRecentRoutesFile["file"], $flightslimit, $routeslimit, $ignoreCache, date("Ymd", strtotime($routesStartDate)), date("Ymd", strtotime($routesEndDate)));

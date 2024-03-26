@@ -85,7 +85,7 @@ class OAGFlights extends OAGBase
         } // foreach flight
 
         //echo "HERE " . __LINE__;
-        }
+        
 
         $flightsArray = array_values($uniqueFlights);
 

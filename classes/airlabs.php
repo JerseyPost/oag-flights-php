@@ -2,7 +2,8 @@
 
 class AirLabs
 {
-    protected $api_key = '822be1f6-6997-42ad-9898-40326906b37e'; // JP
+    // from JP   account, but note that the code now gets it from an environment variable AIRLABS_API_KEY 
+    protected $api_key = '822be1f6-6997-42ad-9898-40326906b37e'; 
 
     const base_url = 'https://airlabs.co/api/v9';
     const LINEENDING = '<br/>';
@@ -21,6 +22,8 @@ class AirLabs
         echo "AIRLABS_API_KEY = $api_env" . self::LINEENDING;
         if (!empty($api_env) && preg_match('/^[0-9a-z-]{36}$/', $api_env)) {
             $this->api_key = $api_env;
+        } else {
+            // or default to using hardcoded one above if env varibale not set
         }
 
         foreach (self::CACHETYPES as $ct) {
